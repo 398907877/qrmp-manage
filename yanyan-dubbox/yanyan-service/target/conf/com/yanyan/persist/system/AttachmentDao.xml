@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yanyan.persist.system.AttachmentDao">
+
+    <cache/>
+
+    <insert id="insertAttachment" parameterType="Attachment">
+        INSERT INTO s_attachment
+          (id, name, url, type, size, ref_type, ref_sub_type, ref_id, create_staff_id,
+           priority, create_time)
+        VALUES
+          (#{id}, #{name}, #{url}, #{type}, #{size}, #{ref_type}, #{ref_sub_type}, #{ref_id},
+           #{create_staff_id}, #{priority}, #{create_time})
+    </insert>
+
+    <update id="updateProfile" parameterType="Attachment">
+        UPDATE s_attachment
+           SET name = #{name}, url = #{url}, type = #{type},  size = #{size}, ref_type = #{ref_type},
+               ref_sub_type = #{ref_sub_type}, ref_id = #{ref_id},
+               create_staff_id = #{create_staff_id}, priority = #{priority},
+               update_time = #{update_time}
+         WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAttachment">
+        DELETE FROM s_attachment WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteAttachments">
+        DELETE FROM s_attachment WHERE ref_id = #{ref_id}
+    </delete>
+
+    <sql id="select_attachment_sql">
+        SELECT id, name, url, type, size, ref_type, ref_sub_type, ref_id, create_staff_id,
+               priority, create_time, update_time
+        FROM s_attachment a
+    </sql>
+
+    <select id="getAttachment" resultType="Attachment">
+        <include refid="select_attachment_sql"></include>
+        <where>
+            a.id = #{id}
+        </where>
+    </select>
+
+    <select id="findAttachment" resultType="Attachment">
+        <include refid="select_attachment_sql"></include>
+        <where>
+            <if test="ref_id != null">
+                AND a.ref_id = #{ref_id}
+            </if>
+            <if test="ref_type != null">
+                AND a.ref_type = #{ref_type}
+            </if>
+            <if test="ref_sub_type != null">
+                AND a.ref_sub_type = #{ref_sub_type}
+            </if>
+        </where>
+        ORDER BY a.priority ASC, a.create_time DESC
+    </select>
+
+</mapper>

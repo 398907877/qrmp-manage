@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<script src="jquery-2.2.4.min.js"></script>
+		<script>
+			$.ajax("http://bmr.wxmetro.net/api_v3/app/convenience/found", {
+						type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',	
+            headers: {
+            	"appid": "c81e728d9d4c2f636f067f89cc14862c",
+            	"signature": "BbavdvCYn1xaoyFDPryydbx9BQMP+grRML+vwccH9hzsxhpaMVnTQQwsVfg+iSsPbVgqNwvyhlLhQqa38VO8ZjImLGCkWEiFsQ0KEjcltC5VkdqfbO429uaoZTacm3YTkee0dlsUahJMDp44sdzWv1vX5erkVOGpASTBXW8m5aU="
+            },
+            data: JSON.stringify({
+            	  "keyword": "abc", 
+            	  "pageNo": 1,
+                "pageSize": 10
+            }),
+            success: function (data, status, xhr) {
+            	//alert(data);
+            	alert("signature="+xhr.getResponseHeader("signature")+"\n"+
+            	  "content-type="+xhr.getResponseHeader("content-type"));
+            }			
+			})
+		</script>
+	</head>
+</html>

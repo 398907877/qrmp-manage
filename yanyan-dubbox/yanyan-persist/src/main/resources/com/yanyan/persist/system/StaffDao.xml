@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yanyan.persist.system.StaffDao">
+
+    <cache/>
+
+    <insert id="insertStaff" parameterType="Staff" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO s_staff
+          (id, corp_id, account, cellphone, name, pyabbr, pinyin,
+           email, is_admin, dept_id, duty, priority, create_time)
+        VALUES
+          (#{id}, #{corp_id}, #{account}, #{cellphone}, #{name}, #{pyabbr}, #{pinyin},
+           #{email}, #{is_admin}, #{dept_id}, #{duty}, #{priority}, #{create_time})
+    </insert>
+
+    <update id="updateStaff" parameterType="Staff">
+        UPDATE s_staff
+           SET account = #{account}, cellphone = #{cellphone}, name = #{name},
+               pyabbr = #{pyabbr}, pinyin = #{pinyin}, email = #{email},
+               dept_id = #{dept_id}, duty = #{duty}, priority = #{priority}, update_time = #{update_time}
+         WHERE id = #{id}
+    </update>
+
+    <update id="changePassword">
+        UPDATE s_staff SET password = #{password}, salt = #{salt}, password_update_time = #{update_time} WHERE id = #{staff_id}
+    </update>
+
+    <update id="lockStaff">
+        UPDATE s_staff SET is_lock = 1 WHERE id = #{id}
+    </update>
+
+    <update id="unlockStaff">
+        UPDATE s_staff SET is_lock = 0 WHERE id = #{id}
+    </update>
+
+    <delete id="deleteStaff">
+        UPDATE s_staff SET is_del = 1 WHERE id = #{id}
+    </delete>
+
+    <sql id="select_staff_sql">
+        SELECT a.id, a.corp_id, a.account, a.cellphone, a.salt, a.name, a.pyabbr,
+               a.pinyin, a.password_update_time, a.email, a.password, a.is_lock, a.dept_id, 
+               (select t.name from s_department t where t.id = a.dept_id) dept_name,
+               a.is_admin, a.priority, a.create_time, a.update_time, b.name corp_name, b.portal_id,
+               (select t.code from s_portal t where t.id = b.portal_id) portal_code
+          FROM s_staff a, s_corporation b
+         WHERE a.corp_id = b.id
+    </sql>
+
+    <select id="getStaff" resultType="Staff">
+        <include refid="select_staff_sql"></include>
+        AND a.id = #{id}
+    </select>
+
+    <select id="getStaffByAccount" resultType="Staff">
+        <include refid="select_staff_sql"></include>
+        AND a.is_del = 0
+        AND b.is_del = 0
+        AND a.account = #{account}
+    </select>
+
+    <select id="getStaffByCellphone" resultType="Staff">
+        <include refid="select_staff_sql"></include>
+        AND a.is_del = 0
+        AND b.is_del = 0
+        AND a.cellphone = #{cellphone}
+    </select>
+
+    <select id="getStaffByEmail" resultType="Staff">
+        <include refid="select_staff_sql"></include>
+        AND a.is_del = 0
+        AND b.is_del = 0
+        AND a.email = #{email}
+    </select>
+
+    <select id="findStaff" resultType="Staff">
+        <include refid="select_staff_sql"></include>
+        AND a.is_del = 0 AND b.is_del = 0
+        <if test="account != null and account != ''">
+            AND a.account = #{account}
+        </if>
+        <if test="name != null and name != ''">
+            AND a.name = #{name}
+        </if>
+        <if test="email != null and email != ''">
+            AND a.email = #{email}
+        </if>
+        <if test="cellphone != null and cellphone != ''">
+            AND a.cellphone = #{cellphone}
+        </if>
+        <if test="create_time_min != null">
+            <![CDATA[
+            AND a.create_time >= #{create_time_min}
+            ]]>
+        </if>
+        <if test="create_time_max != null">
+            <![CDATA[
+            AND a.create_time <= #{create_time_max}
+            ]]>
+        </if>
+        <if test="is_lock != null">
+            AND a.is_lock = #{is_lock}
+        </if>
+        <if test="corp_id != null">
+            AND a.corp_id = #{corp_id}
+        </if>
+        <if test="dept_id != null">
+            AND a.dept_id = #{dept_id}
+        </if>
+        <if test="ancestor_dept_id != null">
+            AND a.dept_id in (
+            <include refid="com.yanyan.persist.TreeDao.select_self_and_descendant_sql">
+                <property name="_TABLE_NAME" value="s_department"/>
+                <property name="id" value="#{ancestor_dept_id}"/>
+            </include>
+            )
+            -- (select t.id from s_department t where t.id = :ancestor_dept_id or t.path like concat((select t.path from
+            s_department t where t.id = #{ancestor_dept_id}), #{ancestor_dept_id}, '/%'))
+        </if>
+        <if test="role_id != null and role_id != ''">
+            AND a.staff_id IN (select t.staff_id from s_staff_role t where t.role_id = #{role_id})
+        </if>
+        <if test="is_admin != null">
+            AND a.is_admin = #{is_admin}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (a.account like concat('%', #{keyword}, '%') or a.name like concat('%', #{keyword}, '%') or a.cellphone
+            like concat('%', #{keyword}, '%') or a.email like concat('%', #{keyword}, '%') or REPLACE(a.pinyin, ' ', '')
+            = concat('%', #{keyword}, '%') or a.pyabbr = concat('%', #{keyword}, '%'))
+        </if>
+        ORDER BY a.priority, a.create_time DESC
+    </select>
+
+    <select id="isDirectManager" resultType="int">
+        SELECT count(*) FROM s_manager WHERE staff_id = #{staff_id} AND dept_id = #{dept_id}
+    </select>
+
+    <delete id="clearStaffRoles">
+        DELETE FROM s_staff_role WHERE staff_id = #{staff_id}
+    </delete>
+
+    <insert id="insertStaffRole">
+        INSERT INTO s_staff_role(role_id, staff_id)VALUES(#{role_id}, #{staff_id})
+    </insert>
+
+    <select id="getStaffRoles" resultType="RoleVo">
+        SELECT a.role_id id, b.code, b.name FROM s_staff_role a, s_role b WHERE a.role_id = b.id AND a.staff_id = #{staff_id}
+    </select>
+
+</mapper>

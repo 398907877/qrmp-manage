@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yanyan.persist.system.PrivilegeDao">
+
+    <cache/>
+
+    <delete id="revokeRolePermissions">
+        DELETE FROM s_role_permission WHERE role_id = #{role_id}
+    </delete>
+
+    <insert id="grantRolePermission">
+        INSERT INTO s_role_permission(role_id, permission_id) VALUES (#{role_id}, #{permission_id})
+    </insert>
+
+    <delete id="revokeStaffPermissions">
+        DELETE FROM s_staff_permission WHERE staff_id = #{staff_id}
+    </delete>
+
+    <insert id="grantStaffPermission">
+        INSERT INTO s_staff_permission(staff_id, permission_id) VALUES (#{staff_id}, #{permission_id})
+    </insert>
+
+    <delete id="revokeRolePrivilegesOfResource">
+        DELETE a FROM s_role_permission a, s_permission b
+         WHERE a.permission_id = b.id
+           AND b.resource_id = #{resource_id}
+    </delete>
+
+    <delete id="revokeStaffPrivilegesOfResource">
+        DELETE a FROM s_staff_permission a, s_permission b
+         WHERE a.permission_id = b.id
+           AND b.resource_id = #{resource_id}
+    </delete>
+
+    <delete id="revokeRolePrivilegesOfRemovedPermissions">
+        DELETE FROM s_role_permission
+         WHERE permission_id NOT IN
+               (SELECT id FROM s_permission)
+    </delete>
+
+    <delete id="revokeStaffPrivilegesOfRemovedPermissions">
+        DELETE FROM s_staff_permission
+         WHERE permission_id NOT IN
+               (SELECT id FROM s_permission)
+    </delete>
+
+    <select id="getStaffPrivileges" resultType="Permission">
+        SELECT b.id, b.resource_id,
+               (SELECT t.name FROM s_resource t WHERE t.id = b.resource_id) resource_name,
+               b.code, b.name, b.remarks, b.is_show, b.create_time, b.update_time
+          FROM s_staff_permission a, s_permission b
+         WHERE a.permission_id = b.id
+           AND a.staff_id = #{staff_id}
+    </select>
+
+    <select id="getRolePrivileges" resultType="Permission">
+        SELECT b.id, b.resource_id,
+               (SELECT t.name FROM s_resource t WHERE t.id = b.resource_id) resource_name,
+               b.code, b.name, b.remarks, b.is_show, b.create_time, b.update_time
+          FROM s_role_permission a, s_permission b
+         WHERE a.permission_id = b.id
+           AND a.role_id = #{role_id}
+    </select>
+
+    <select id="getAllPrivileges" resultType="Permission">
+        SELECT b.id, b.resource_id,
+               (SELECT t.name FROM s_resource t WHERE t.id = b.resource_id) resource_name,
+               b.code, b.name, b.remarks, b.is_show, b.create_time, b.update_time
+          FROM s_staff_permission a, s_permission b
+         WHERE a.permission_id = b.id
+           AND a.staff_id = #{staff_id}
+        UNION
+        SELECT b.id, b.resource_id,
+               (SELECT t.name FROM s_resource t WHERE t.id = b.resource_id) resource_name,
+               b.CODE, b.NAME, b.remarks, b.is_show, b.create_time, b.update_time
+          FROM s_role_permission a, s_permission b
+         WHERE a.permission_id = b.id
+           AND a.role_id in
+               (SELECT role_id FROM s_staff_role WHERE staff_id = #{staff_id})
+    </select>
+
+    <select id="getAccessibleResources" resultType="Resource">
+        SELECT id, portal_id, code, name, parent_id, path, url, target, icon,
+               remarks, priority, is_show, create_time, update_time
+          FROM s_resource a
+         WHERE a.id IN
+               (SELECT b.resource_id
+                  FROM s_staff_permission a, s_permission b
+                 WHERE a.permission_id = b.id
+                   AND a.staff_id = #{staff_id}
+                UNION
+                SELECT b.resource_id
+                  FROM s_role_permission a, s_permission b
+                 WHERE a.permission_id = b.id
+                   AND a.role_id IN
+                       (SELECT role_id FROM s_staff_role WHERE staff_id = #{staff_id}))
+         ORDER BY priority
+    </select>
+
+</mapper>

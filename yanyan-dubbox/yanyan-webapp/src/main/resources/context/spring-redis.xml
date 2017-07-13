@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:redission="http://redisson.org/schema/redisson"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd">
+    <!--&lt;!&ndash; jedis 配置 &ndash;&gt;-->
+    <!--<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">-->
+    <!--<property name="minIdle" value="${redis.pool.minIdle}"/>-->
+    <!--<property name="maxIdle" value="${redis.pool.maxIdle}"/>-->
+    <!--<property name="maxTotal" value="${redis.pool.maxTotal}"/>-->
+    <!--<property name="maxWaitMillis" value="${redis.pool.maxWait}"/>-->
+    <!--<property name="testOnBorrow" value="${redis.pool.testOnBorrow}"/>-->
+    <!--<property name="timeBetweenEvictionRunsMillis" value="${redis.pool.timeBetweenEvictionRunsMillis}"/>-->
+    <!--<property name="minEvictableIdleTimeMillis" value="${redis.pool.minEvictableIdleTimeMillis}"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; redis服务器中心 &ndash;&gt;-->
+    <!--<bean id="connectionFactory"-->
+    <!--class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">-->
+    <!--<property name="poolConfig" ref="poolConfig"/>-->
+    <!--<property name="port" value="${redis.port}"/>-->
+    <!--<property name="hostName" value="${redis.hostname}"/>-->
+    <!--&lt;!&ndash; <property name="password" value="${redis.password}" /> &ndash;&gt;-->
+    <!--<property name="timeout" value="${redis.timeout}"/>-->
+    <!--<property name="usePool" value="${redis.usePool}"/>-->
+    <!--<property name="database" value="${redis.default.db}"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">-->
+    <!--<property name="connectionFactory" ref="connectionFactory"/>-->
+    <!--<property name="keySerializer">-->
+    <!--<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>-->
+    <!--</property>-->
+    <!--<property name="valueSerializer">-->
+    <!--<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>-->
+    <!--</property>-->
+    <!--</bean>-->
+    <!-- 配置缓存 -->
+    <!--<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">-->
+    <!--<constructor-arg ref="redisTemplate"/>-->
+    <!--&lt;!&ndash;设为true才支持多个cache使用同样的key&ndash;&gt;-->
+    <!--<property name="usePrefix" value="true"/>-->
+    <!--</bean>-->
+
+    <!--采用Redisson时的配置 https://github.com/redisson/redisson/wiki/2.-配置方法-->
+    <bean id="jdkCodec" class="org.redisson.codec.SerializationCodec"/>
+    <redission:client
+            id="redissonClient"
+            name="redisson1,redisson2"
+            threads="0"
+            netty-threads="0"
+            codec-ref="jdkCodec"
+            use-linux-native-epoll="false"
+            redisson-reference-enabled="true">
+        <redission:single-server
+                address="${redis.hostname}:${redis.port}"
+                idle-connection-timeout="10000"
+                ping-timeout="1000"
+                connect-timeout="10000"
+                timeout="3000"
+                retry-attempts="3"
+                retry-interval="1500"
+                reconnection-timeout="3000"
+                failed-attempts="3"
+                subscriptions-per-connection="5"
+                client-name="none"
+                subscription-connection-minimum-idle-size="1"
+                subscription-connection-pool-size="50"
+                connection-minimum-idle-size="10"
+                connection-pool-size="64"
+                database="0"
+                dns-monitoring="false"
+                dns-monitoring-interval="5000"/>
+    </redission:client>
+
+    <bean id="cacheManager" class="org.redisson.spring.cache.RedissonSpringCacheManager">
+        <constructor-arg name="redisson" ref="redissonClient"/>
+        <constructor-arg name="config">
+            <!--配置各缓存的过期时间和最长空闲时间，这里只是示例配置，没有实际用途-->
+            <map>
+                <entry key="testCache">
+                    <bean class="org.redisson.spring.cache.CacheConfig">
+                        <property name="TTL" value="1800000"/> <!-- 30 minutes -->
+                        <property name="maxIdleTime" value="900000"/> <!-- 15 minutes -->
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+</beans>

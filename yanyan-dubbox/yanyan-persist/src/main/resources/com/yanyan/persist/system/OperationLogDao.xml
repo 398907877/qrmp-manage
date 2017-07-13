@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yanyan.persist.system.OperationLogDao">
+
+    <cache/>
+
+    <insert id="insertOperationLog" parameterType="OperationLog">
+        insert into s_operation_log
+          (operation_id, operation_name, staff_id, corp_id, operate_time, operate_content)
+        values
+          (#{operation_id}, #{operation_name}, #{staff_id}, #{corp_id}, #{operate_time}, #{operate_content})
+    </insert>
+
+    <sql id="select_operation_log_sql">
+        SELECT a.operation_id, a.operation_name, a.staff_id, b.account staff_account,
+               a.corp_id, c.name corp_name, a.operate_time, a.operate_content, a.create_time
+          FROM s_operation_log a, s_staff b, s_corporation c
+         WHERE a.staff_id = b.id
+           AND a.corp_id = c.id
+    </sql>
+
+    <select id="getOperationLog" resultType="OperationLog">
+        <include refid="select_operation_log_sql"></include>
+        <where>
+            a.id = #{id}
+        </where>
+    </select>
+
+    <select id="findOperationLog" resultType="OperationLog">
+        <include refid="select_operation_log_sql"></include>
+        <if test="corp_id != null">
+            AND a.corp_id = #{corp_id}
+        </if>
+        <if test="staff_id != null">
+            AND a.staff_id = #{staff_id}
+        </if>
+        <if test="operate_time_min != null">
+            <![CDATA[
+            AND a.operate_time >= #{operate_time_min}
+            ]]>
+        </if>
+        <if test="operate_time_max != null">
+            <![CDATA[
+            AND a.operate_time <= #{operate_time_max}
+            ]]>
+        </if>
+        <if test="operation_id != null">
+            AND a.operation_id = #{operation_id}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

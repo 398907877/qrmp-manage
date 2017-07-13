@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yanyan.persist.system.BulletinDao">
+
+    <cache/>
+
+    <insert id="insertBulletin" parameterType="Bulletin" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO s_bulletin
+            (id, title, content, publish_time, effective_time, expiry_time, corp_id)
+        VALUES
+            (#{id}, #{title}, #{content}, #{publish_time}, #{effective_time}, #{expiry_time}, #{corp_id})
+    </insert>
+
+    <update id="updateBulletin" parameterType="Bulletin">
+        UPDATE s_bulletin
+           SET title = #{title}, content = #{content},
+               publish_time = #{publish_time}, effective_time = #{effective_time},
+               expiry_time = #{expiry_time}
+         WHERE id = #{id}
+    </update>
+
+    <update id="deleteBulletin">
+        update s_bulletin set status = 0 where id = #{id}
+    </update>
+
+    <sql id="select_bulletin_sql">
+        SELECT id, title, content, publish_time, effective_time, expiry_time, status, corp_id
+          FROM s_bulletin a
+    </sql>
+
+    <select id="getBulletin" resultType="Bulletin">
+        <include refid="select_bulletin_sql"></include>
+        <where>
+            a.id = #{id}
+        </where>
+    </select>
+
+    <select id="findBulletin" resultType="Bulletin">
+        <include refid="select_bulletin_sql"></include>
+        where a.status = 1
+        <if test="corp_id != null">
+            AND a.corp_id = #{corp_id}
+        </if>
+        <if test="effective_time_min != null">
+            <![CDATA[
+            AND a.effective_time >= #{effective_time_min}
+            ]]>
+        </if>
+        <if test="effective_time_max != null">
+            <![CDATA[
+            AND a.effective_time <= #{effective_time_max}
+            ]]>
+        </if>
+        <if test="status != null and status != ''">
+            AND a.status IN
+            <foreach item="statusCode" collection="status" open="(" separator="," close=")">
+                #{statusCode}
+            </foreach>
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (a.title LIKE concat('%', #{keyword}, '%') OR a.content LIKE concat('%', #{keyword}, '%'))
+        </if>
+        <choose>
+            <when test="effective==true">
+                <![CDATA[
+                AND a.expiry_time > now()
+                ]]>
+            </when>
+            <when test="effective==false">
+                <![CDATA[
+                AND a.expiry_time <= now()
+                ]]>
+            </when>
+        </choose>
+        ORDER BY a.effective_time DESC
+    </select>
+
+</mapper>

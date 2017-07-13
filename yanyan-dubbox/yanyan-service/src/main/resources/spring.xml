@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="order" value="0"></property>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <!-- 标准配置 -->
+                <value>classpath*:app.properties</value>
+                <value>classpath*:dubbo.properties</value>
+                <value>classpath*:jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+
+	<import resource="classpath*:context/spring-monitor.xml"/>
+	<import resource="classpath*:context/spring-persist.xml"/>
+	<import resource="classpath*:context/spring-service.xml"/>
+    <import resource="classpath*:dubbo/dubbo-service-provider.xml"/>
+
+    <bean id="gson" class="com.yanyan.core.spring.GsonFactoryBean">
+        <property name="dateFormatPattern" value="yyyy/MM/dd HH:mm:ss"/>
+        <property name="disableHtmlEscaping" value="true"/>
+        <property name="serializeNulls" value="true"/>
+    </bean>
+
+	<!-- 自动扫描(自动注入)，扫描这个包以及它的子包的所有使用@Service注解标注的类 -->
+	<context:component-scan base-package="com.yanyan.service" />
+</beans>

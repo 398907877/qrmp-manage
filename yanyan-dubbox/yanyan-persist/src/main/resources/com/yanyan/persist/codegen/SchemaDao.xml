@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yanyan.persist.codegen.SchemaDao">
+
+    <select id="getSchemaList" resultType="Schema">
+        SELECT schema_name name FROM information_schema.SCHEMATA WHERE schema_name NOT IN ('information_schema', 'mysql', 'performance_schema', 'sys') ORDER BY schema_name
+    </select>
+
+    <select id="getTableList" resultType="Table">
+        SELECT table_name name, table_comment comment FROM information_schema.TABLES WHERE table_schema = #{schema}
+    </select>
+
+    <select id="getTable" resultType="Table">
+        SELECT table_name name, table_comment comment FROM information_schema.TABLES WHERE table_schema = #{schema} AND table_name = #{name}
+    </select>
+
+    <select id="getColumnList" resultType="Column">
+        SELECT column_name name, data_type type, IFNULL(character_maximum_length, 0) + IFNULL(numeric_precision, 0) + IF(numeric_scale>0, 1, 0) /*+ IFNULL(datetime_precision, 0)*/ maxlen, column_comment comment FROM information_schema.COLUMNS WHERE table_schema = #{schema}
+    </select>
+
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yanyan.persist.system.DictionaryDao">
+
+    <cache/>
+
+    <!-- Dictionary Group -->
+
+    <insert id="insertDictionaryGroup" parameterType="DictionaryGroup" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO s_dictionary_group
+          (id, code, name, remarks, priority, create_time)
+        VALUES
+          (#{id}, #{code}, #{name}, #{remarks}, #{priority}, #{create_time})
+    </insert>
+
+    <update id="updateDictionaryGroup" parameterType="DictionaryGroup">
+        UPDATE s_dictionary_group
+           SET code = #{code}, name = #{name}, remarks = #{remarks}, priority = #{priority}, update_time = #{update_time}
+         WHERE id = #{id}
+    </update>
+
+    <update id="deleteDictionaryGroup">
+        UPDATE s_dictionary_group SET is_del = 1 WHERE id = #{id}
+    </update>
+
+    <sql id="select_dictionary_group_sql">
+        SELECT id, code, name, remarks, priority, create_time, update_time
+          FROM s_dictionary_group a
+    </sql>
+
+    <select id="getDictionaryGroup" resultType="DictionaryGroup">
+        <include refid="select_dictionary_group_sql"></include>
+        <where>
+            a.id = #{id}
+        </where>
+    </select>
+
+    <select id="getDictionaryGroupByCode" resultType="DictionaryGroup">
+        <include refid="select_dictionary_group_sql"></include>
+        <where>
+            a.code = #{code}
+        </where>
+    </select>
+
+    <select id="findDictionaryGroup" resultType="DictionaryGroup">
+        <include refid="select_dictionary_group_sql"></include>
+        WHERE a.is_del = 0
+        <if test="code != null and code != ''">
+            AND a.code = #{code}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (a.code LIKE concat('%', #{keyword}, '%') OR a.name LIKE concat('%', #{keyword}, '%'))
+        </if>
+        ORDER BY a.priority, a.create_time
+    </select>
+
+    <!-- Dictionary Entry -->
+
+    <insert id="insertDictionaryEntry" parameterType="DictionaryEntry" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO s_dictionary
+          (id, code, name, value, group_id, remarks, priority, create_time)
+        VALUES
+          (#{id}, #{code}, #{name}, #{value}, #{group_id}, #{remarks}, #{priority}, #{create_time})
+    </insert>
+
+    <update id="updateDictionaryEntry" parameterType="DictionaryEntry">
+        UPDATE s_dictionary
+           SET code = #{code}, name = #{name}, value = #{value}, group_id = #{group_id},
+               remarks = #{remarks}, priority = #{priority},
+               update_time = #{update_time}
+         WHERE id = #{id}
+    </update>
+
+    <update id="deleteDictionaryEntry">
+        UPDATE s_dictionary SET is_del = 1 WHERE id = #{id}
+    </update>
+
+    <update id="deleteDictionaryEntryByGroup">
+        UPDATE s_dictionary SET is_del = 1 WHERE group_id = #{group_id}
+    </update>
+
+    <sql id="select_dictionary_entry_sql">
+        SELECT id, code, name, value, group_id,
+               (select t.name from s_dictionary_group t where t.id = a.group_id) group_name,
+               remarks, priority, create_time, update_time
+          FROM s_dictionary a
+    </sql>
+
+    <select id="getDictionaryEntry" resultType="DictionaryEntry">
+        <include refid="select_dictionary_entry_sql"></include>
+        <where>
+            a.id = #{id}
+        </where>
+    </select>
+
+    <select id="getDictionaryEntryByCode" resultType="DictionaryEntry">
+        <include refid="select_dictionary_entry_sql"></include>
+        <where>
+            a.code = #{code}
+        </where>
+    </select>
+
+    <select id="findDictionaryEntry" resultType="DictionaryEntry">
+        <include refid="select_dictionary_entry_sql"></include>
+        WHERE a.is_del = 0
+        <if test="code != null and code != ''">
+            AND a.code = #{code}
+        </if>
+        <if test="group_id != null">
+            AND a.group_id = #{group_id}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (a.code LIKE concat('%', #{keyword}, '%') OR a.value LIKE concat('%', #{keyword}, '%') OR a.name LIKE
+            concat('%', #{keyword}, '%'))
+        </if>
+        ORDER BY a.group_id, a.priority, a.create_time
+    </select>
+
+</mapper>

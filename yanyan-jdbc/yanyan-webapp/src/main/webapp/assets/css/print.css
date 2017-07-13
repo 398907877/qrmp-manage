@@ -1,0 +1,359 @@
+.text-left {
+    text-align: left !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.no-border {
+    border: none !important;
+}
+
+@media print {
+    .body {
+        background: transparent none;
+    }
+
+    .no-print {
+        display: none;
+    }
+}
+
+/*普通A4纸张*/
+body.A4 {
+    width: 800px;
+    text-align: center;
+    word-break: break-all;
+    word-wrap: break-word;
+    font-size: 12px;
+    font-family: "宋体", Tahoma, Arial;
+}
+
+.A4 table {
+    border: 1px dashed #333;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: "宋体", Tahoma, Arial;
+    line-height: 24px;
+}
+
+.A4 thead {
+    display: table-header-group;
+}
+
+.A4 thead .title {
+    text-align: center;
+    line-height: 30px;
+}
+
+.A4 thead .headline {
+    text-align: center;
+    line-height: 50px;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.A4 thead .subtitle-left {
+    float: right;
+    margin-right: 10px;
+    line-height: 25px;
+}
+
+.A4 thead .subtitle-right {
+    float: left;
+    margin-right: 10px;
+    line-height: 25px;
+}
+
+.A4 thead .subtitle-right {
+    float: right;
+    margin-right: 10px;
+    line-height: 25px;
+}
+
+.A4 tbody {
+    text-align: center;
+}
+
+.A4 tr {
+    -webkit-region-break-inside: auto;
+    page-break-inside: avoid;
+    position: relative;
+}
+
+.A4 tbody td {
+    padding-left: 5px;
+    text-align: left;
+}
+
+.A4 th, .A4 td {
+    border: thin solid #333;
+}
+
+.A4 .no-border {
+    border: none;
+}
+
+.A4 tbody > tr {
+    page-break-after: auto;
+}
+
+.A4 tfoot {
+    display: table-footer-group;
+}
+
+.A4 tfoot .remarks {
+    line-height: 20px;
+}
+
+/*针式打印机2联 21.4cm*13.9cm*/
+body.stylus-2 {
+    width: 21.6cm;
+    text-align: center;
+    word-break: break-all;
+    word-wrap: break-word;
+    font-size: 12px;
+    font-family: "微软雅黑", "宋体", Tahoma, Arial;
+    margin: 0px;
+    color: #000;
+}
+
+.stylus-2 table {
+    border: 1px dashed #000;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: "微软雅黑", "宋体", Tahoma, Arial;
+    line-height: 16px;
+}
+
+.stylus-2 thead {
+    display: table-header-group;
+}
+
+.stylus-2 thead .title {
+    text-align: center;
+    line-height: 30px;
+}
+
+.stylus-2 thead .headline {
+    text-align: center;
+    line-height: 24px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.stylus-2 thead .subtitle-left {
+    float: left;
+    margin-left: 10px;
+    line-height: 25px;
+}
+
+.stylus-2 thead .subtitle-right {
+    float: right;
+    margin-right: 10px;
+    line-height: 25px;
+}
+
+.stylus-2 thead > tr > td.no-border:last-child {
+    border-right: 1px dashed #000 !important;
+}
+
+.stylus-2 tbody {
+    text-align: center;
+}
+
+.stylus-2 tr {
+    -webkit-region-break-inside: auto;
+    page-break-inside: avoid;
+    position: relative;
+}
+
+.stylus-2 tbody td {
+    padding-left: 5px;
+    text-align: left;
+    /*font-size: 14px;*/
+}
+
+.stylus-2 th, .stylus-2 td {
+    border: thin solid #000;
+}
+
+.stylus-2 tbody > tr {
+    page-break-after: auto;
+}
+
+.stylus-2 tfoot {
+    display: table-footer-group;
+}
+
+.stylus-2 tfoot .remarks {
+    line-height: 20px;
+}
+
+/*快递单全局设置*/
+body.express {
+    color: #000;
+    font-size: 14px;
+    font-family: "微软雅黑", "宋体", Tahoma;
+    /*font-weight: bolder;*/
+    width: 20.50cm;
+    height: 12.70cm;
+    margin: 0;
+    padding: 0;
+}
+
+.express div {
+    position: absolute;
+}
+
+/*EMS快递单*/
+body.ems {
+    background: transparent url("../img/express/ems.jpg") no-repeat -1.3cm 0;
+    background-size: 23.10cm 12.70cm;
+    line-height: 25px;
+}
+
+.ems .from-name {
+    top: 122px;
+    left: 75px;
+}
+
+.ems .from-contact-man {
+    top: 98px;
+    left: 70px;
+}
+
+.ems .from-contact-phone {
+    top: 98px;
+    left: 230px;
+}
+
+.ems .from-address {
+    top: 145px;
+    left: 55px;
+    max-width: 330px;
+}
+
+.ems .to-name {
+    top: 240px;
+    left: 75px;
+}
+
+.ems .to-contact-man {
+    top: 215px;
+    left: 70px;
+}
+
+.ems .to-contact-phone {
+    top: 215px;
+    left: 230px;
+}
+
+.ems .to-address {
+    top: 265px;
+    left: 55px;
+    width: 330px;
+}
+
+.ems .year {
+    top: 220px;
+    left: 590px;
+}
+
+.ems .month {
+    top: 220px;
+    left: 640px;
+}
+
+.ems .date {
+    top: 220px;
+    left: 673px;
+}
+
+.ems .hour {
+    top: 220px;
+    left: 704px;
+}
+
+.ems .signature {
+    top: 190px;
+    left: 640px;
+}
+
+/*顺丰快递单*/
+body.shunfeng {
+    background: transparent url("../img/express/shunfeng.jpg") no-repeat -1.3cm 0;
+    background-size: 23.10cm 12.70cm;
+    line-height: 25px;
+}
+
+.shunfeng .from-name {
+    top: 129px;
+    left: 55px;
+}
+
+.shunfeng .from-contact-man {
+    top: 129px;
+    left: 275px;
+}
+
+.shunfeng .from-contact-phone {
+    top: 154px;
+    left: 55px;
+}
+
+.shunfeng .from-address {
+    top: 177px;
+    left: 55px;
+    max-width: 320px;
+}
+
+.shunfeng .to-name {
+    top: 266px;
+    left: 55px;
+}
+
+.shunfeng .to-contact-man {
+    top: 266px;
+    left: 275px;
+}
+
+.shunfeng .to-contact-phone {
+    top: 289px;
+    left: 55px;
+}
+
+.shunfeng .to-address {
+    top: 313px;
+    left: 55px;
+    max-width: 320px;
+}
+
+.shunfeng .year {
+    display: none;
+}
+
+.shunfeng .month {
+    top: 403px;
+    left: 417px;
+}
+
+.shunfeng .date {
+    top: 403px;
+    left: 455px;
+}
+
+.shunfeng .hour {
+    top: 403px;
+    left: 488px;
+}
+
+.shunfeng .signature {
+    top: 385px;
+    left: 440px;
+}

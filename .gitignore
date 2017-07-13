@@ -9,8 +9,8 @@ yanyan-core/.rar
 yanyan-core/.idea
 yanyan-core/*.iml
 yanyan-core/.settings/*
-yanyan-core//indexes/*
-yanyan-core//target/*
+yanyan-core/indexes/*
+yanyan-core/target/*
 yanyan-core/src/main/webapp/WEB-INF/classes/*
 yanyan-core/src/main/webapp/userfiles/*
 yanyan-core/target/
@@ -28,8 +28,8 @@ yanyan-dubbox/.rar
 yanyan-dubbox/.idea
 yanyan-dubbox/*.iml
 yanyan-dubbox/.settings/*
-yanyan-dubbox//indexes/*
-yanyan-dubbox//target/*
+yanyan-dubbox/indexes/*
+yanyan-dubbox/target/*
 yanyan-dubbox/src/main/webapp/WEB-INF/classes/*
 yanyan-dubbox/src/main/webapp/userfiles/*
 yanyan-dubbox/target/
@@ -49,8 +49,8 @@ yanyan-jdbc/.rar
 yanyan-jdbc/.idea
 yanyan-jdbc/*.iml
 yanyan-jdbc/.settings/*
-yanyan-jdbc//indexes/*
-yanyan-jdbc//target/*
+yanyan-jdbc/indexes/*
+yanyan-jdbc/target/*
 yanyan-jdbc/src/main/webapp/WEB-INF/classes/*
 yanyan-jdbc/src/main/webapp/userfiles/*
 yanyan-jdbc/target/
@@ -67,8 +67,8 @@ yanyan-mybatis/.rar
 yanyan-mybatis/.idea
 yanyan-mybatis/*.iml
 yanyan-mybatis/.settings/*
-yanyan-mybatis//indexes/*
-yanyan-mybatis//target/*
+yanyan-mybatis/indexes/*
+yanyan-mybatis/target/*
 yanyan-mybatis/src/main/webapp/WEB-INF/classes/*
 yanyan-mybatis/src/main/webapp/userfiles/*
 yanyan-mybatis/target/

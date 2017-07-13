@@ -10,10 +10,10 @@ yanyan-core/.idea
 yanyan-core/*.iml
 yanyan-core/.settings/*
 yanyan-core/indexes/*
-yanyan-core/target/*
+/yanyan-core/target/*
 yanyan-core/src/main/webapp/WEB-INF/classes/*
 yanyan-core/src/main/webapp/userfiles/*
-yanyan-core/target/
+
 
 
 

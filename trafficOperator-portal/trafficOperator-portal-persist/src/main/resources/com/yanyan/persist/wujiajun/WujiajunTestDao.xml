@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yanyan.persist.wujiajun.WujiajunTestDao">
+
+	<cache />
+
+	<insert id="insertWujiajunTest" parameterType="Staff"
+		useGeneratedKeys="true" keyProperty="id">
+
+	</insert>
+
+	<update id="updateWujiajunTest" parameterType="Staff">
+
+	</update>
+
+	<update id="changePassword">
+		UPDATE s_staff SET password = #{password}, salt = #{salt},
+		password_update_time = #{update_time} WHERE id = #{staff_id}
+	</update>
+
+	<update id="lockStaff">
+		UPDATE s_staff SET is_lock = 1 WHERE id = #{id}
+	</update>
+
+	<update id="unlockStaff">
+		UPDATE s_staff SET is_lock = 0 WHERE id = #{id}
+	</update>
+
+	<delete id="deleteWujiajunTest">
+
+
+
+	</delete>
+
+	<sql id="select_staff_sql">
+		SELECT a.id, a.corp_id, a.account, a.cellphone, a.salt, a.name, a.pyabbr,
+		a.pinyin, a.password_update_time, a.email, a.password, a.is_lock,
+		a.dept_id,
+		(select t.name from s_department t where t.id = a.dept_id) dept_name,
+		a.is_admin, a.priority, a.create_time, a.update_time, b.name
+		corp_name, b.portal_id,
+		(select t.code from s_portal t where t.id = b.portal_id) portal_code
+		FROM s_staff a, s_corporation b
+		WHERE a.corp_id = b.id
+	</sql>
+
+	<select id="getWujiajunTest" resultType="Staff">
+
+
+
+	</select>
+
+
+	<select id="findWujiajunTest" resultType="Staff">
+
+
+
+	</select>
+
+
+	<select id="getAllWujiajunTest" resultType="Staff">
+
+
+
+	</select>
+
+
+</mapper>

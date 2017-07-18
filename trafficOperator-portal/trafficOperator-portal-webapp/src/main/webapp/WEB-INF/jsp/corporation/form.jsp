@@ -160,12 +160,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-2 required">联系电话</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="contact_nbr" name="contact_nbr" class="form-control"
-                                               maxlength="100"
-                                               placeholder="请输入联系电话"
-                                               value="<c:out value="${corporation.contact_nbr}"/>">
-                                    </div>
+                          
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-2">邮编</label>

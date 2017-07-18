@@ -70,19 +70,35 @@
                             <table id="table" class="table table-striped table-hover no-margin">
                                 <thead>
                                 <tr>
-                                    <th style="width: 20%">发布日期</th>
-                                    <th style="width: 70%">标题</th>
-                                    <th></th>
+                                    <th  >编号</th>
+                                    <th >交通运营商名称</th>
+                                    <th >所在地市（省市）</th>
+                                    <th >运营商简介</th>
+                                     <th >服务状态（正常、终止）</th>
+                                      <th >最后修改用户</th>
+                                         <th >修改时间</th>
+                                            <th >运营商联系人信息</th>
+                              
+                                    
+                                  
                                 </tr>
                                 </thead>
                                 <c:if test="${page.totalCount>0}">
+                                
+                                
                                     <tbody>
-                                    <c:forEach items="${page.rows}" var="bulletin">
+                                    <c:forEach items="${page.rows}" var="operatorInformation">
                                         <tr>
-                                            <td class="text-left"><fmt:formatDate value="${bulletin.publish_time}" pattern="yyyy/MM/dd HH:mm"/></td>
-                                            <td class="text-left name"><c:out value="${bulletin.title}"/></td>
+                                            <td class="text-left"><c:out value="${operatorInformation.id}"/></td>
+                                            <td class="text-left name"><c:out value="${operatorInformation.operatorName}"/></td>
+                                                  <td class="text-left name"><c:out value="${operatorInformation.location}"/></td>
+                                                        <td class="text-left name"><c:out value="${operatorInformation.operatorDesc}"/></td>
+                                                              <td class="text-left name"><c:out value="${operatorInformation.serviceState}"/></td>
+                                                                    <td class="text-left name"><c:out value="${operatorInformation.lastModifyUser}"/></td>
+                                                                          <td class="text-left name"><fmt:formatDate value="${operatorInformation.lastModifyTime}" pattern="yyyy/MM/dd HH:mm"/></td>
+                                                                                <td class="text-left name"><a href="#">后续联系人加入 1-N</a></td>
                                             <td class="text-center">
-                                                <div class="lk-btn-group" data-id="${bulletin.id}">
+                                                <div class="lk-btn-group" data-id="${operatorInformation.id}">
                                                     <a href="javascript:" class="update">编辑</a><a href="javascript:"
                                                                                                   class="delete">删除</a>
                                                 </div>
@@ -90,9 +106,11 @@
                                         </tr>
                                     </c:forEach>
                                     </tbody>
+                                    
+                                    
                                     <tfoot>
                                     <tr class="pagination-bar">
-                                        <td colspan="6">
+                                        <td colspan="10">
                                             <c:set var="pageNo" value="${page.pageNo}" scope="request"></c:set>
                                             <c:set var="pageSize" value="${page.pageSize}" scope="request"></c:set>
                                             <c:set var="totalCount" value="${page.totalCount}" scope="request"></c:set>
@@ -134,7 +152,7 @@
     }
 
     function doCreate() {
-        location.assign("${home}/operatorManagement/create");
+        location.assign("${home}/operatorManagement/form");
     }
 
     function doUpdate(id) {

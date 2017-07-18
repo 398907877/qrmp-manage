@@ -66,6 +66,13 @@
 
     <dubbo:service interface="com.yanyan.service.system.StaffService" ref="staffService" protocol="dubbo"/>
     <bean id="staffService" class="com.yanyan.service.system.impl.StaffServiceImpl"/>
+    
+    <!-- wujiajun add  -->
+    
+        <dubbo:service interface="com.bwton.service.operatorManagement.OperatorInformationService" ref="operatorInformationService" protocol="dubbo"/>
+    <bean id="operatorInformationService" class="com.bwton.service.operatorManagement.impl.OperatorInformationServiceImpl"/>
+    
+    
 
 
 </beans>

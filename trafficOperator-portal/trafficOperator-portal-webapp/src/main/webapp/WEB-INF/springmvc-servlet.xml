@@ -34,7 +34,11 @@
     <!-- 映射静态资源 -->
     <mvc:resources location="favicon.ico" mapping="favicon.ico"/>
     <mvc:resources location="/assets/" mapping="/assets/**"/>
+    
     <mvc:resources location="/errors/" mapping="/errors/**"/>
+    
+    <mvc:resources location="/smartadmin/" mapping="/smartadmin/**"/>
+    
     <!--mvc:default-servlet-handler/-->
 
     <!--alias name="cacheManager" alias="webCacheManager"/-->

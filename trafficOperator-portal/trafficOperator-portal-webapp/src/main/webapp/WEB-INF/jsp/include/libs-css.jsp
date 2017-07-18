@@ -12,6 +12,9 @@
     <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/css/global.css">
     <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/css/animation.css">
 
+    
+
+
 
     <!-- RTL Support -->
     <!--link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/css/rtl.min.css"-->

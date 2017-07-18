@@ -13,6 +13,17 @@
     <name>trafficOperator-portal-webapp</name>
     <url>http://www.yanyan.com</url>
     
+    
+	<!-- 项目属性 -->
+	<properties>
+	
+		<jdk.version>1.8</jdk.version>
+		
+		
+	</properties>
+    
+    
+    
     <dependencies>
         <dependency>
             <groupId>com.yanyan</groupId>
@@ -30,6 +41,22 @@
     <build>
         <finalName>trafficOperator-portal-webapp</finalName>
         <plugins>
+        
+        
+        
+        
+        	<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+        
+        
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>

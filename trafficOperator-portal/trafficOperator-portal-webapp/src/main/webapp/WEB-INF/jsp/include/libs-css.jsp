@@ -6,11 +6,12 @@
     <!-- Basic Styles -->
     <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/libs/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/fonts/fontawesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/fonts/iconfont/iconfont.css">
+   <!-- <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/fonts/iconfont/iconfont.css">-->
 
     <!-- COMMON Styles : Caution! DO NOT change the order -->
     <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/css/global.css">
     <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/css/animation.css">
+
 
     <!-- RTL Support -->
     <!--link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/css/rtl.min.css"-->

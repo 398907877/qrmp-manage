@@ -55,9 +55,9 @@ public class StaffController {
         query.defaultPageParam();
         
         
-        Staff staff= staffService.getStaff((long) 1);
+        //Staff staff= staffService.getStaff((long) 1);
         
-        
+        System.out.println(query.getPageSize());
         
 
         if (query.getCorp_id() == null) {

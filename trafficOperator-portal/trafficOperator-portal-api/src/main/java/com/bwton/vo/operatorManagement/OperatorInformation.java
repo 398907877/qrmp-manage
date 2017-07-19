@@ -3,6 +3,10 @@ package com.bwton.vo.operatorManagement;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.Data;
+
+
+@Data
 public class OperatorInformation  implements  Serializable{
     /**
      *
@@ -12,6 +16,11 @@ public class OperatorInformation  implements  Serializable{
      * @mbg.generated
      */
     private Integer id;
+    
+    private String province_id;
+    
+    private String city_id;
+    
 
     /**
      *

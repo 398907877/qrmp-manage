@@ -93,10 +93,29 @@
                                             <td class="text-left name"><c:out value="${operatorInformation.operatorName}"/></td>
                                                   <td class="text-left name"><c:out value="${operatorInformation.location}"/></td>
                                                         <td class="text-left name"><c:out value="${operatorInformation.operatorDesc}"/></td>
-                                                              <td class="text-left name"><c:out value="${operatorInformation.serviceState}"/></td>
-                                                                    <td class="text-left name"><c:out value="${operatorInformation.lastModifyUser}"/></td>
-                                                                          <td class="text-left name"><fmt:formatDate value="${operatorInformation.lastModifyTime}" pattern="yyyy/MM/dd HH:mm"/></td>
-                                                                                <td class="text-left name"><a href="#">后续联系人加入 1-N</a></td>
+                                                        
+                                                        
+                                                        <td class="text-left">
+                                                <c:choose>
+                                                    <c:when test="${operatorInformation.serviceState==0}"><label class="label label-default">未选择</label></c:when>
+                                                    <c:when test="${operatorInformation.serviceState==1}"><label class="label label-success">正常</label></c:when>
+                                                    <c:when test="${operatorInformation.serviceState==2}"><label class="label label-warning">停用</label></c:when>
+                                 
+                                                    <c:otherwise>其他</c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                                        
+                                                        
+                                          
+                                                              
+                                                                               
+                                                                          <td class="text-left name"><c:out value="${operatorInformation.lastModifyUser}"/></td>
+                                                              
+                                                         
+                                                                    <td class="text-left name">     <fmt:formatDate value="${operatorInformation.lastModifyTime}" pattern="yyyy/MM/dd HH:mm"/></td>
+                                                                    
+                                                   
+                                                                                <td class="text-left name"><a href="#">查看联系人</a></td>
                                             <td class="text-center">
                                                 <div class="lk-btn-group" data-id="${operatorInformation.id}">
                                                     <a href="javascript:" class="update">编辑</a><a href="javascript:"
@@ -193,10 +212,10 @@
     	
         $(document).on("click", "#btnQuery", function (e) {//查询
             
-        	 alert(1111);	
+ 
         	   e.preventDefault();
 
-        alert(   e);
+ 
             var $table = $(".table");
             doQuery(1, getPageSize($table));
         }).on("click", ".pagination li", function (e) {//翻页

@@ -174,7 +174,7 @@
 									<div class="form-group">
                                     <label class="control-label col-sm-2 required">最后修改用户</label>
                                     <div class="col-sm-10">
-                                        <input type="text" id="lastModifyUser" name="lastModifyUser" class="form-control"
+                                        <input    readonly  type="text" id="lastModifyUser" name="lastModifyUser" class="form-control"
                                                maxlength="20"
                                                placeholder="请输入人员用户名" value="<c:out value="${operatorInformation.lastModifyUser}"/>">
                                         <p class="note"><strong>Note:</strong> 最后修改用户</p>
@@ -187,7 +187,7 @@
                                                                                 <div class="form-group">
                                     <label class="control-label col-sm-2 required">修改时间</label>
                                     <div class="col-sm-10">
-                                        <input type="text" id="lastModifyTime" name="lastModifyTime" class="form-control"
+                                        <input  readonly  type="text" id="lastModifyTime" name="lastModifyTime" class="form-control"
                                                maxlength="20"
                                                placeholder="请输入人员用户名"     value="<fmt:formatDate value="${operatorInformation.lastModifyTime}" pattern="yyyy/MM/dd"></fmt:formatDate>">
                                         <p class="note"><strong>Note:</strong> 修改时间</p>
@@ -236,17 +236,19 @@
                                         <tr>
                                             
                                             <td class="text-center">
-                                                <input type="text" class="purchase-price text-right" value="0.00"
+                                                <input type="text" class="name text-right"     placeholder="请输入姓名"
                                                        data-orig-price="0.00"/>
                                             </td>
                                             <td class="text-center">
-                                                <input type="text" class="quantity text-center" value="0"/>
+                                                <input type="text"     placeholder="请输入电话号码"  class="telphone text-center"   />
                                             </td>
                                             <td class="text-right">
-                                                <input type="text" class="discount-money text-right" value="0.00"/>
+                                                <input type="text"    placeholder="请输入 邮件" class="email  text-right"    />
                                             </td>
-                                            <td class="text-right actual-money"> <input     placeholder="请输入人员用户名" type="text" class="discount-money text-right" 	/></td>
-                                            <td><input type="text" class="remarks" maxlength="100"/></td>
+                                            <td class="text-right "> <input     placeholder="请输入地址" type="text" class="adress text-right" 	/></td>
+                                            
+                                            
+                                            <td><input type="text"     placeholder="请输入相关说明"  class="remarks" maxlength="100"/></td>
                                             <td>
                                                 <div class="opercol center-block">
                                                     <span title="增加" class="oper fa fa-plus add"></span>
@@ -327,6 +329,20 @@ function doBack() {
 
 
 function doSave() {
+	
+	 var  items = []
+	 
+	 
+	 $("#purchaseItems.table>tbody>tr").each(function () {
+         var $row = $(this),
+                 opin_id = parseInt($("#id").val()),
+                 name = $row.find(".name").val(),
+                 telphone = $row.find(".telphone").val(),
+                 email =$row.find(".email").val(),
+                 adress =$row.find(".adress").val()
+
+        
+     })
 	
 
 	
@@ -421,7 +437,7 @@ function doSave() {
                 address: {required: true},
                 contact_man: {required: true},
                 contact_nbr: {required: true, mobile: true},
-                email: {email: true},
+            //    email: {email: true},
                 introduction: {maxlength: 500},
                 admin_account: {required: true}
             },
@@ -434,7 +450,7 @@ function doSave() {
                 address: {required: "请填写地址"},
                 contact_man: {required: "请输入联系人"},
                 contact_nbr: {required: "请输入联系电话", mobile: "手机号码格式不正确"},
-                email: {email: "请输入合法的电子邮箱"},
+              //  email: {email: "请输入合法的电子邮箱"},
                 introduction: {maxlength: "企业简介长度不能超过500"},
                 admin_account: {required: "请输入管理员账号"}
             }

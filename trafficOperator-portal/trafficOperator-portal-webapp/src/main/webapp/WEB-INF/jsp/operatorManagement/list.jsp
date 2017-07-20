@@ -91,8 +91,8 @@
                                         <tr>
                                             <td class="text-left"><c:out value="${operatorInformation.id}"/></td>
                                             <td class="text-left name"><c:out value="${operatorInformation.operatorName}"/></td>
-                                                  <td class="text-left name"><c:out value="${operatorInformation.location}"/></td>
-                                                        <td class="text-left name"><c:out value="${operatorInformation.operatorDesc}"/></td>
+                                                  <td class="text-left "><c:out value="${operatorInformation.location}"/></td>
+                                                        <td class="text-left "><c:out value="${operatorInformation.operatorDesc}"/></td>
                                                         
                                                         
                                                         <td class="text-left">
@@ -109,13 +109,13 @@
                                           
                                                               
                                                                                
-                                                                          <td class="text-left name"><c:out value="${operatorInformation.lastModifyUser}"/></td>
+                                                                          <td class="text-left "><c:out value="${operatorInformation.lastModifyUser}"/></td>
                                                               
                                                          
-                                                                    <td class="text-left name">     <fmt:formatDate value="${operatorInformation.lastModifyTime}" pattern="yyyy/MM/dd HH:mm"/></td>
+                                                                    <td class="text-left ">     <fmt:formatDate value="${operatorInformation.lastModifyTime}" pattern="yyyy/MM/dd HH:mm"/></td>
                                                                     
                                                    
-                                                                                <td class="text-left name"><a href="#">查看联系人</a></td>
+                                                                                <td class="text-left "><a href="#">查看联系人</a></td>
                                             <td class="text-center">
                                                 <div class="lk-btn-group" data-id="${operatorInformation.id}">
                                                     <a href="javascript:" class="update">编辑</a><a href="javascript:"
@@ -234,7 +234,7 @@
         }).on("click", ".delete", function (e) {//删除
             e.preventDefault();
             var $this = $(this);
-            layer.confirm("确认删除公告[" + getName($this) + "]？", {
+            layer.confirm("确认删除 运营商[" + getName($this) + "]？", {
                 icon: 3,
                 title: '提示'
             }, function (index) {

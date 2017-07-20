@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page trimDirectiveWhitespaces="true" %>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -13,6 +14,8 @@
     <c:import url="/libs-css"/>
     <%//此处插入页面自定义的样式%>
     <link rel="stylesheet" type="text/css" media="screen" href="${home}/assets/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="${home}/assets/plugins/datepicker/css/bootstrap-datetimepicker.min.css"/>
+    
 </head>
 <body>
 
@@ -89,7 +92,7 @@
                                             <option value=""></option>
                                             <c:forEach items="${provinceOptions}" var="option">
                                                 <option value="${option.id}"
-                                                    ${option.id==corporation.province_id?"selected=selected":""}
+                                                    ${option.id==operatorInformation.province_id?"selected=selected":""}
                                                         data-pinyin="${option.pinyin}"
                                                         data-pyabbr="${option.pyabbr}"><c:out
                                                         value="${option.name}"/></option>
@@ -101,7 +104,7 @@
                                             <option value=""></option>
                                             <c:forEach items="${cityOptions}" var="option">
                                                 <option value="${option.id}"
-                                                    ${option.id==corporation.city_id?"selected=selected":""}
+                                                    ${option.id==operatorInformation.city_id?"selected=selected":""}
                                                         data-pinyin="${option.pinyin}"
                                                         data-pyabbr="${option.pyabbr}"><c:out
                                                         value="${option.name}"/></option>
@@ -133,32 +136,42 @@
                                         <p class="note"><strong>Note:</strong>运营商简介</p>
                                     </div>
                                 </div>
-                                
-                                
-    
-                                
-                                
-                                
-                                
-                                                            <div class="form-group">
-                                    <label class="control-label col-sm-2 required">服务状态（正常、终止）</label>
-                                    <div class="col-sm-10">
-                                          <select id="serviceState" name="serviceState" class="form-control select2"
-                                                data-placeholder="请选择性别">
-                                            <option value="0" ${chauffeur.gender==0?"selected:selected":""}>请选择</option>
-                                            <option value="1" ${chauffeur.gender==1?"selected:selected":""}>正常</option>
-                                            <option value="2" ${chauffeur.gender==2?"selected:selected":""}>终止</option>
-                                        </select>
-                                        <p class="note"><strong>Note:</strong> 服务状态（正常、）</p>
-                                    </div>
-                                </div>
-                                
-                                
-                                
-                                           
-                                
-                                                                                  
-                                                <div class="form-group">
+
+
+
+
+
+
+
+									<div class="form-group">
+										<label class="control-label col-sm-2 required">服务状态（正常、终止）</label>
+										<div class="col-sm-10">
+											<select id="serviceState" name="serviceState"
+												class="form-control select2" data-placeholder="请选择22323别">
+												
+												
+  
+												<option value="0"
+												  ${operatorInformation.serviceState==0?"selected=selected":""} >未选择</option>
+
+												<option value="1"    
+												  ${operatorInformation.serviceState==1?"selected=selected":""}   >正常</option>
+												<option value="2"
+													  ${operatorInformation.serviceState==2?"selected=selected":""} >终止</option>
+
+											</select>
+											<p class="note">
+												<strong>Note:</strong> 服务状态（正常、停用）
+											</p>
+										</div>
+									</div>
+
+
+
+
+
+
+									<div class="form-group">
                                     <label class="control-label col-sm-2 required">最后修改用户</label>
                                     <div class="col-sm-10">
                                         <input type="text" id="lastModifyUser" name="lastModifyUser" class="form-control"
@@ -176,7 +189,7 @@
                                     <div class="col-sm-10">
                                         <input type="text" id="lastModifyTime" name="lastModifyTime" class="form-control"
                                                maxlength="20"
-                                               placeholder="请输入人员用户名" value="<c:out value="${operatorInformation.lastModifyTime}"/>">
+                                               placeholder="请输入人员用户名"     value="<fmt:formatDate value="${operatorInformation.lastModifyTime}" pattern="yyyy/MM/dd"></fmt:formatDate>">
                                         <p class="note"><strong>Note:</strong> 修改时间</p>
                                     </div>
                                 </div>
@@ -184,25 +197,81 @@
                                 
                                 
                                 
-                                                               
+
                                 
                                 
-                                                                                <div class="form-group">
-                                    <label class="control-label col-sm-2 required">新增联系人</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="account" name="account" class="form-control"
-                                               maxlength="20"
-                                               placeholder="请输入人员用户名" value="<c:out value="${operatorInformation.account}"/>">
-                                        <p class="note"><strong>Note:</strong>新增联系人</p>
-                                    </div>
-                                </div>
-                                
-                                
-                                
-                                
-                                
+
+                            </fieldset>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            <legend class="text-center">
+                                新增联系人 
+                            </legend>
+                            <fieldset>
+                                <div class="col-sm-12">
+                                    <table id="purchaseItems" cellpadding="0" cellspacing="0" border="0"
+                                           class="table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 20%">联系人姓名</th>
+                                            <th style="width: 10%">手机号</th>
+                                            <th style="width: 20%">邮件</th>
+                                            <th class="text-center" style="width: 7%">地址</th>
+                                            <th class="text-left" style="width: 15%">说明</th>
+                                            <th style="width: 10%"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            
+                                            <td class="text-center">
+                                                <input type="text" class="purchase-price text-right" value="0.00"
+                                                       data-orig-price="0.00"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="text" class="quantity text-center" value="0"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <input type="text" class="discount-money text-right" value="0.00"/>
+                                            </td>
+                                            <td class="text-right actual-money"> <input     placeholder="请输入人员用户名" type="text" class="discount-money text-right" 	/></td>
+                                            <td><input type="text" class="remarks" maxlength="100"/></td>
+                                            <td>
+                                                <div class="opercol center-block">
+                                                    <span title="增加" class="oper fa fa-plus add"></span>
+                                                    <span title="删除" class="oper fa fa-minus remove"></span>
+                                                    <span title="上移" class="oper fa fa-arrow-up moveup"></span>
+                                                    <span title="下移" class="oper fa fa-arrow-down movedown"></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                	</div>
                                 
                             </fieldset>
+                            
+                            
+                            
+                            
+                            
+
+                            
+                            
+                            
+                            
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <button id="btnSave" class="btn btn-primary">
@@ -241,7 +310,15 @@
 <script type="text/javascript" src="${home}/assets/plugins/select2/js/i18n/zh-CN.js"></script>
 
 
+<script type="text/javascript" src="${home}/assets/plugins/moment/moment.min.js"></script>
+<script type="text/javascript" src="${home}/assets/plugins/moment/locale/zh-cn.min.js"></script>
+<script type="text/javascript" src="${home}/assets/plugins/datepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+
 <script type="text/javascript">
+
+
+
 
 
 function doBack() {
@@ -250,7 +327,10 @@ function doBack() {
 
 
 function doSave() {
-    $.ServiceClient.invoke("${home}/operatorManagement/${!empty operatorManagement.id?"update.json":"form.json"}", {
+	
+
+	
+    $.ServiceClient.invoke("${home}/operatorManagement/${!empty operatorInformation.id?"update.json":"form.json"}", {
         data: {
             "id": parseInt($("#id").val()),
             "operatorName": $("#operatorName").val(),
@@ -362,6 +442,10 @@ function doSave() {
     }
 
     $(function () {
+
+
+    	
+
         $(".select2").select2({
             matcher: function (params, data) {
                 if (!params.term) return data;
@@ -400,6 +484,86 @@ function doSave() {
             doBack();
         });
     })
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    $(function () {
+    	
+
+
+    	
+    	$(document).on("click", ".add", function () {
+            var $row = $(this).closest("tr"),
+                    $new = $("<tr>   <td class='text-center'>  <input type='text' class='purchase-price text-right' value='0.00'  data-orig-price='0.00'/>   </td>   <td class='text-center'>  <input type='text' class='quantity text-center' value='0'/>   </td>   <td class='text-right'>  <input type='text' class='discount-money text-right' value='0.00'/>   </td>   <td class='text-right actual-money'>0.00</td>   <td><input type='text' class='remarks' maxlength='100'/></td>   <td>  <div class='opercol center-block'>    <span title='增加' class='oper fa fa-plus add'></span>    <span title='删除' class='oper fa fa-minus remove'></span>    <span title='上移' class='oper fa fa-arrow-up moveup'></span>    <span title='下移' class='oper fa fa-arrow-down movedown'></span>  </div>   </td>  </tr>");
+
+            $row.after($new);
+
+            $row.find(".quantity").change();
+        }).on("click", ".remove", function () {
+            var $row = $(this).closest("tr");
+            if ($(".table tbody tr").size() == 1) {
+
+            } else {
+                $row.remove();
+            }
+            $(".quantity").eq(0).change();
+        }).on("click", ".moveup", function () {
+            var $row = $(this).closest("tr"), $prev = $row.prev("tr");
+            if ($prev.size() > 0) {
+                $prev.before($row);
+            }
+        }).on("click", ".movedown", function () {
+            var $row = $(this).closest("tr"), $next = $row.next("tr");
+
+            if ($next.size() > 0) {
+                $next.after($row);
+            }
+        });
+    })
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 </script>
 </body>
 </html>

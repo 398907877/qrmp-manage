@@ -28,7 +28,7 @@
         </javaTypeResolver>  
           
         <!-- 生成实体类地址 -->    
-        <javaModelGenerator targetPackage="com.oop.eksp.user.model"  
+        <javaModelGenerator targetPackage="com.wujiajun.model"  
             targetProject="trafficOperator-portal-webapp" >  
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->  
             <property name="enableSubPackages" value="false"/>  
@@ -37,22 +37,22 @@
         </javaModelGenerator>  
           
         <!-- 生成mapxml文件 -->  
-        <sqlMapGenerator targetPackage="com.oop.eksp.user.data"  
+        <sqlMapGenerator targetPackage="com.wujiajun.data"  
             targetProject="trafficOperator-portal-webapp" >  
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->  
             <property name="enableSubPackages" value="false" />  
         </sqlMapGenerator>  
           
         <!-- 生成mapxml对应client，也就是接口dao -->      
-        <javaClientGenerator targetPackage="com.oop.eksp.user.data"  
+        <javaClientGenerator targetPackage="com.wujiajun.data"  
             targetProject="trafficOperator-portal-webapp" type="XMLMAPPER" >  
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->  
             <property name="enableSubPackages" value="false" />  
         </javaClientGenerator>  
           
         <!-- 配置表信息 -->      
-        <table schema="INFOGUARDIAN" tableName="g_operator_information"  
-            domainObjectName="OperatorInformation" >  
+        <table schema="INFOGUARDIAN" tableName="g_operator_contacts"  
+            domainObjectName="ContactsVo"    >  
             
             <!-- enableCountByExample="false"  
             enableDeleteByExample="false" enableSelectByExample="true"  

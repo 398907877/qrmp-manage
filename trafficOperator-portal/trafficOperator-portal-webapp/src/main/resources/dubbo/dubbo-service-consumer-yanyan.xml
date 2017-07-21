@@ -65,10 +65,16 @@
 		interface="com.yanyan.service.system.StaffService" protocol="dubbo"
 		timeout="20000" retries="0" check="false" />
 
-
+<!-- wujiajun  add  -->
 	<dubbo:reference id="operatorInformationService"
 		interface="com.bwton.service.operatorManagement.OperatorInformationService"
 		protocol="dubbo" timeout="20000" retries="0" check="false" />
+		
+			<dubbo:reference id="contactsVoService"
+		interface="com.bwton.service.contacts.ContactsVoService"
+		protocol="dubbo" timeout="20000" retries="0" check="false" />
+
+		
 
 
 

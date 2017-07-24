@@ -73,7 +73,7 @@
                                     <div class="col-sm-10">
                                         <input type="text" id="operatorName" name="operatorName" class="form-control"
                                                maxlength="20"
-                                               placeholder="请输入人员用户名" value="<c:out value="${operatorInformation.operatorName}"/>">
+                                               placeholder="请输入人员用户名"    value="<c:out value="${operatorInformation.operatorName}"/>"    >
                                         <p class="note"><strong>Note:</strong> 交通运营商名称</p>
                                     </div>
                                 </div>
@@ -211,12 +211,13 @@
                             
                             
                             
+  
                             
+                            <c:if test="${empty operatorInformation.id }">
                             
-                            
-                            
+                         
                             <legend class="text-center">
-                                新增联系人 
+                                新增联系人  新增
                             </legend>
                             <fieldset>
                                 <div class="col-sm-12">
@@ -264,6 +265,106 @@
                                 	</div>
                                 
                             </fieldset>
+                            
+                            </c:if>
+                            
+                            
+                            
+                            
+                            
+                            
+                            <c:if test="${!empty operatorInformation.id }">
+                            
+                         
+                            <legend class="text-center">
+                                新增联系人  详情
+                            </legend>
+                            <fieldset>
+                                <div class="col-sm-12">
+                                    <table id="purchaseItems" cellpadding="0" cellspacing="0" border="0"
+                                           class="table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 20%">联系人姓名</th>
+                                            <th style="width: 10%">手机号</th>
+                                            <th style="width: 20%">邮件</th>
+                                            <th class="text-center" style="width: 7%">地址</th>
+                                            <th class="text-left" style="width: 15%">说明</th>
+                                            <th style="width: 10%"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                                                   
+                                        
+                                                                                    <c:forEach items="${linkmans}" var="linkman">
+                                     
+                                         
+                                        
+                                        <tr>
+                                        
+                                     
+                                        <td  style="display: none">
+                                            <input type="text"        class="id  text-right"        value="<c:out value="${linkman.id}"/>" >
+                                            </td>
+                                            
+                                         
+                                            
+                                            <td class="text-center">
+                                                <input type="text" class="name text-right"     placeholder="请输入姓名"    value="<c:out value="${linkman.name}"/>" />
+                                                       
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="text"     placeholder="请输入电话号码"  class="telphone text-center"   value="<c:out value="${linkman.telphone}"/>" />
+                                            </td>
+                                            <td class="text-right">
+                                                <input type="text"    placeholder="请输入 邮件"              value="<c:out value="${linkman.email}"/>"   class="email  text-right"           />
+                                            </td>
+                                            <td class="text-right "> <input     placeholder="请输入地址" type="text" class="adress text-right"      value="<c:out value="${linkman.adress}"/>"	/></td>
+                                            
+                                            
+                                            <td><input type="text"     placeholder="请输入相关说明"  class="remarks" maxlength="100"     value="2"	   /></td>
+                                            <td>
+                                            
+                                            
+                                            
+                                                <div class="opercol center-block">
+                                                    <span title="增加" class="oper fa fa-plus add"></span>
+                                                    <span title="删除" class="oper fa fa-minus remove"></span>
+                                                    <span title="上移" class="oper fa fa-arrow-up moveup"></span>
+                                                    <span title="下移" class="oper fa fa-arrow-down movedown"></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        
+                                        
+                                        
+                                        </c:forEach>
+                                        </tbody>
+                                        
+                                    </table>
+                                	</div>
+                                
+                            </fieldset>
+                            
+                            </c:if>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             
                             
                             
@@ -339,13 +440,17 @@ function doSave() {
 	 
 	 $("#purchaseItems.table>tbody>tr").each(function () {
          var $row = $(this),
+         
+         
+         id = $row.find(".id").val(),
+
                  opin_id = parseInt($("#id").val()),
                  name = $row.find(".name").val(),
                  telphone = $row.find(".telphone").val(),
                  email =$row.find(".email").val(),
                  adress =$row.find(".adress").val()
                  
-                 item={"opin_id":opin_id,"name":name,"telphone":telphone,"email":email,"adress":adress}
+                 item={"id":id,"opin_id":opin_id,"name":name,"telphone":telphone,"email":email,"adress":adress}
 
          items.push(item);
      })
@@ -389,6 +494,7 @@ function doSave() {
     });
 }
 
+   
    
 
 
@@ -468,6 +574,8 @@ function doSave() {
     }
 
     $(function () {
+    	
+
 
 
     	

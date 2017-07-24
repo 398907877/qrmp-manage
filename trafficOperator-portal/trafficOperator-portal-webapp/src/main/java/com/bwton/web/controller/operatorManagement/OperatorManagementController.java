@@ -1,6 +1,7 @@
 package com.bwton.web.controller.operatorManagement;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bwton.service.contacts.ContactsVoService;
 import com.bwton.service.operatorManagement.OperatorInformationService;
+import com.bwton.vo.contacts.ContactsVo;
+import com.bwton.vo.contacts.ContactsVoExample;
 import com.bwton.vo.operatorManagement.OperatorInformation;
 import com.bwton.vo.operatorManagement.OperatorInformationExample;
 import com.bwton.vo.operatorManagement.OperatorInformationExample.Criteria;
@@ -51,6 +55,11 @@ public class OperatorManagementController {
 
 	@Autowired
 	private RegionService regionService;
+	
+	
+	
+    @Autowired
+    private ContactsVoService contactsVoService;
 
 	@RequestMapping("/list")
 	public String list(@ModelAttribute(value = "query", name = "query") OperatorInformationExample query, Model model) {
@@ -215,6 +224,17 @@ public class OperatorManagementController {
         model.addAttribute("operatorInformation",operatorInformation);
         
         
+        
+        ContactsVoExample conQuery= new ContactsVoExample();
+        
+        com.bwton.vo.contacts.ContactsVoExample.Criteria conCq=   conQuery.createCriteria();
+        
+        conCq.andOpinIdEqualTo(operatorInformation.getId());
+        
+        List<ContactsVo> conVos= contactsVoService.selectByExample(conQuery).getRows();
+        
+        
+        model.addAttribute("linkmans", conVos);
 
     	
        // model.addAttribute("DEFAULT_PASSWORD", Configs.DEFAULT_PASSWORD);

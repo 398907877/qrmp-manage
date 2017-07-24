@@ -2,6 +2,9 @@ package com.bwton.vo.operatorManagement;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import com.bwton.vo.contacts.ContactsVo;
 
 import lombok.Data;
 
@@ -15,6 +18,11 @@ public class OperatorInformation  implements  Serializable{
      *
      * @mbg.generated
      */
+	
+	
+	private  List<ContactsVo>    linkmans;
+	
+	
     private Integer id;
     
     private String province_id;

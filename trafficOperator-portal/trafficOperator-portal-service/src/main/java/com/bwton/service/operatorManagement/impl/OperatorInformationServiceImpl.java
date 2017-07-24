@@ -1,12 +1,15 @@
 package com.bwton.service.operatorManagement.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bwton.persist.contacts.ContactsVoDao;
 import com.bwton.persist.operatorManagement.OperatorInformationDao;
 import com.bwton.service.operatorManagement.OperatorInformationService;
+import com.bwton.vo.contacts.ContactsVo;
 import com.bwton.vo.operatorManagement.OperatorInformation;
 import com.bwton.vo.operatorManagement.OperatorInformationExample;
 import com.yanyan.core.lang.Page;
@@ -21,6 +24,10 @@ public class OperatorInformationServiceImpl extends BaseService implements Opera
     @Autowired
     private OperatorInformationDao operatorInformationDao;
 	
+    
+	
+    @Autowired
+    private ContactsVoDao contactsVoDao;
 	
 	@Override
 	public int deleteByPrimaryKey(Integer id) {
@@ -31,7 +38,23 @@ public class OperatorInformationServiceImpl extends BaseService implements Opera
 	@Override
 	public int insert(OperatorInformation record) {
 		// TODO Auto-generated method stub
-		return operatorInformationDao.insert(record);
+		
+		    operatorInformationDao.insert(record);
+		     
+		    Integer  opin_id=record.getId();  
+		
+	     List<ContactsVo> linmans= 	record.getLinkmans();
+	     
+	     for (ContactsVo contactsVo : linmans) {
+	    	 
+	    	 contactsVo.setOpinId(opin_id);
+	    	 contactsVoDao.insert(contactsVo);
+			
+		}
+		
+		
+		
+		return  record.getId();
 	}
 
 	@Override

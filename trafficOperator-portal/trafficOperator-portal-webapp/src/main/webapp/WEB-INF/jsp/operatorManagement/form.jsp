@@ -330,7 +330,11 @@ function doBack() {
 
 function doSave() {
 	
-	 var  items = []
+	
+	
+	
+	
+	 var  items = [],success = true;
 	 
 	 
 	 $("#purchaseItems.table>tbody>tr").each(function () {
@@ -340,9 +344,15 @@ function doSave() {
                  telphone = $row.find(".telphone").val(),
                  email =$row.find(".email").val(),
                  adress =$row.find(".adress").val()
+                 
+                 item={"opin_id":opin_id,"name":name,"telphone":telphone,"email":email,"adress":adress}
 
-        
+         items.push(item);
      })
+     
+             if (!success) {
+            return false;
+        }
 	
 
 	
@@ -355,11 +365,11 @@ function doSave() {
             "serviceState": $("#serviceState").val(),
             "lastModifyUser": $("#lastModifyUser").val(),
             "lastModifyTime": $("#lastModifyTime").val(),
-            
-            
-             
+
             "province_id": $("#province_id").val(),
-            "city_id": $("#city_id").val()
+            "city_id": $("#city_id").val(),
+            
+            "linkmans":items
             
 
         },
@@ -530,7 +540,7 @@ function doSave() {
     	
     	$(document).on("click", ".add", function () {
             var $row = $(this).closest("tr"),
-                    $new = $("<tr>   <td class='text-center'>  <input type='text' class='purchase-price text-right' value='0.00'  data-orig-price='0.00'/>   </td>   <td class='text-center'>  <input type='text' class='quantity text-center' value='0'/>   </td>   <td class='text-right'>  <input type='text' class='discount-money text-right' value='0.00'/>   </td>   <td class='text-right actual-money'>0.00</td>   <td><input type='text' class='remarks' maxlength='100'/></td>   <td>  <div class='opercol center-block'>    <span title='增加' class='oper fa fa-plus add'></span>    <span title='删除' class='oper fa fa-minus remove'></span>    <span title='上移' class='oper fa fa-arrow-up moveup'></span>    <span title='下移' class='oper fa fa-arrow-down movedown'></span>  </div>   </td>  </tr>");
+                    $new = $("<tr>  <td class='text-center'>  <input type='text' class='name text-right'  placeholder='请输入姓名'  data-orig-price='0.00'/>  </td>  <td class='text-center'>  <input type='text'  placeholder='请输入电话号码'  class='telphone text-center'  />  </td>  <td class='text-right'>  <input type='text'  placeholder='请输入 邮件' class='email  text-right'  />  </td>  <td class='text-right '> <input  placeholder='请输入地址' type='text' class='adress text-right' 	/></td>  <td><input type='text'  placeholder='请输入相关说明'  class='remarks' maxlength='100'/></td>  <td>  <div class='opercol center-block'>  <span title='增加' class='oper fa fa-plus add'></span>  <span title='删除' class='oper fa fa-minus remove'></span>  <span title='上移' class='oper fa fa-arrow-up moveup'></span>  <span title='下移' class='oper fa fa-arrow-down movedown'></span>  </div>  </td>  </tr>");
 
             $row.after($new);
 

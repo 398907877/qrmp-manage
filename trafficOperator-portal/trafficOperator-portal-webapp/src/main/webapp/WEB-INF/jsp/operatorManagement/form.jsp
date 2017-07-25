@@ -213,7 +213,7 @@
                             
   
                             
-                            <c:if test="${empty operatorInformation.id }">
+                            <c:if test="${empty operatorInformation.id || linkmans.size()<=0}">
                             
                          
                             <legend class="text-center">
@@ -273,7 +273,7 @@
                             
                             
                             
-                            <c:if test="${!empty operatorInformation.id }">
+                            <c:if test="${!empty operatorInformation.id  && linkmans.size()>0  }">
                             
                          
                             <legend class="text-center">

@@ -67,11 +67,11 @@
 
 <!-- wujiajun  add  -->
 	<dubbo:reference id="operatorInformationService"
-		interface="com.bwton.service.operatorManagement.OperatorInformationService"
+		interface="com.bwton.qrmp.manage.service.operatorManagement.OperatorInformationService"
 		protocol="dubbo" timeout="20000" retries="0" check="false" />
 		
 			<dubbo:reference id="contactsVoService"
-		interface="com.bwton.service.contacts.ContactsVoService"
+		interface="com.bwton.qrmp.manage.service.contacts.ContactsVoService"
 		protocol="dubbo" timeout="20000" retries="0" check="false" />
 
 		

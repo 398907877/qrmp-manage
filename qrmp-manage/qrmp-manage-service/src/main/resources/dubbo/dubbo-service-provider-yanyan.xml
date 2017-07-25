@@ -69,11 +69,11 @@
     
     <!-- wujiajun add  -->
     
-        <dubbo:service interface="com.bwton.service.operatorManagement.OperatorInformationService" ref="operatorInformationService" protocol="dubbo"/>
-    <bean id="operatorInformationService" class="com.bwton.service.operatorManagement.impl.OperatorInformationServiceImpl"/>
+        <dubbo:service interface="com.bwton.qrmp.manage.service.operatorManagement.OperatorInformationService" ref="operatorInformationService" protocol="dubbo"/>
+    <bean id="operatorInformationService" class="com.bwton.qrmp.manage.service.operatorManagement.impl.OperatorInformationServiceImpl"/>
     
-            <dubbo:service interface="com.bwton.service.contacts.ContactsVoService" ref="contactsVoService" protocol="dubbo"/>
-    <bean id="contactsVoService" class="com.bwton.service.contacts.impl.ContactsVoServiceImpl"/>
+            <dubbo:service interface="com.bwton.qrmp.manage.service.contacts.ContactsVoService" ref="contactsVoService" protocol="dubbo"/>
+    <bean id="contactsVoService" class="com.bwton.qrmp.manage.service.contacts.impl.ContactsVoServiceImpl"/>
     
     
 

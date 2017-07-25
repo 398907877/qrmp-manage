@@ -1,0 +1,283 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="order" value="0"></property>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <!-- 标准配置 -->
+                <value>classpath*:app.properties</value>
+                <value>classpath*:redis.properties</value>
+                <value>classpath*:shiro.properties</value>
+                <value>classpath*:dubbo.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--import resource="classpath*:context/spring-redis.xml"/-->
+    <import resource="classpath*:context/spring-shiro.xml"/>
+
+    <import resource="classpath*:dubbo/dubbo-service-consumer.xml"/>
+
+    <!-- 默认扫描的包路径 -->
+    <context:component-scan base-package="com.*"/>
+    <!-- 添加注解驱动 -->
+    <!--mvc:annotation-driven/-->
+    <!-- 映射静态资源 -->
+    <mvc:resources location="favicon.ico" mapping="favicon.ico"/>
+    <mvc:resources location="/assets/" mapping="/assets/**"/>
+    
+    <mvc:resources location="/errors/" mapping="/errors/**"/>
+    
+    <mvc:resources location="/smartadmin/" mapping="/smartadmin/**"/>
+    
+    <!--mvc:default-servlet-handler/-->
+
+    <!--alias name="cacheManager" alias="webCacheManager"/-->
+    
+    <bean id="webCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="webEhcacheManager"/>
+    </bean>
+
+    <bean id="webEhcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:context/ehcache/ehcache-web.xml"/>
+    </bean>
+
+    <!-- 注册ConversionService -->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <!--按照约定的规则传参,尽量不要自定义转换-->
+        <property name="converters">
+            <set>
+                <bean class="com.yanyan.core.spring.core.convert.support.StringToDateConverter"/>
+            </set>
+        </property>
+        <!--property name="formatters">
+            <set>
+                <bean class="cn.yanyan.web.controller.support.formatter.PhoneNumberFormatAnnotationFormatterFactory"/>
+            </set>
+        </property-->
+    </bean>
+    <!--原生的Bean无法注册自定义对象-->
+    <bean id="gson" class="com.yanyan.core.spring.GsonFactoryBean">
+        <property name="dateFormatPattern" value="yyyy/MM/dd HH:mm:ss"/>
+        <property name="disableHtmlEscaping" value="true"/>
+        <property name="serializeNulls" value="true"/>
+    </bean>
+
+    <bean id="sml" class="com.yanyan.core.spring.SmlFactoryBean">
+        <property name="dateFormatPattern" value="yyyy/MM/dd HH:mm:ss"/>
+        <property name="disableHtmlEscaping" value="true"/>
+        <property name="serializeNulls" value="true"/>
+    </bean>
+
+    <!-- 处理JSON数据转换的 -->
+    <bean id="gsonHttpMessageConverter"
+          class="org.springframework.http.converter.json.GsonHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json</value>
+            </list>
+        </property>
+        <property name="gson" ref="gson"/>
+    </bean>
+
+    <!-- 处理XML数据转换的 -->
+    <bean id="smlHttpMessageConverter"
+          class="com.yanyan.core.spring.http.converter.xml.SmlHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/xml</value>
+            </list>
+        </property>
+        <property name="rootName" value="request"/>
+        <property name="sml" ref="sml"/>
+    </bean>
+
+    <bean id="formHttpMessageConverter"
+          class="com.yanyan.core.spring.http.converter.form.FormHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/x-www-form-urlencoded</value>
+                <value>multipart/form-data</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="requestModelMethodArgumentResolver"
+          class="com.yanyan.core.spring.web.servlet.mvc.method.annotation.RequestModelMethodArgumentResolver">
+        <constructor-arg name="messageConverters">
+            <list>
+                <ref bean="gsonHttpMessageConverter"/>
+                <ref bean="smlHttpMessageConverter"/>
+                <ref bean="formHttpMessageConverter"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+        <property name="conversionService" ref="conversionService"/>
+        <property name="validator" ref="validator"/>
+    </bean>
+
+    <!-- JSR303 Validator定义，HibernateValidator通过services方式注入 -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+    <!--Spring3.1开始的注解 HandlerMapping -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
+                    <constructor-arg ref="conversionService"/>
+                </bean>
+                <bean class="com.yanyan.core.spring.web.servlet.handler.HandlerMethodInterceptor">
+                    <!--这里定义名值列表，将作为常量放置在request.Attributes中-->
+                    <property name="attributes">
+                        <map>
+                            <entry key="APP_NAME" value="Traffic   Operator Portal"></entry>
+                            <entry key="APP_VERSION" value="v1.0"></entry>
+                            <entry key="COMPANY_NAME" value="BWTON"></entry>
+                            <entry key="COPYRIGHT" value="Copyright © 2017-2099 BWTON"></entry>
+                        </map>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!--Spring3.1开始的注解 HandlerAdapter -->
+    <bean name="handlerAdapter"
+          class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="webBindingInitializer" ref="webBindingInitializer">
+        </property>
+        <property name="messageConverters">
+            <list>
+                <ref bean="gsonHttpMessageConverter"/>
+                <ref bean="smlHttpMessageConverter"/>
+            </list>
+        </property>
+        <!--
+        此处配置用于处理带有@RequestModel的模型数据，请求可以是Http+JSON/XML或表单形式
+        -->
+        <property name="customArgumentResolvers">
+            <list>
+                <ref bean="requestModelMethodArgumentResolver"/>
+            </list>
+        </property>
+    </bean>
+
+    <mvc:cors>
+        <mvc:mapping path="/api/**" exposed-headers="sequence,signature,token"/>
+        <mvc:mapping path="/app/**" exposed-headers="sequence,signature,token"/>
+    </mvc:cors>
+
+    <bean id="urlBasedCorsConfigurationSource" class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
+        <!-- 使用<mvc:cors>的配置 -->
+        <property name="corsConfigurations" ref="mvcCorsConfigurations"/>
+    </bean>
+
+    <!-- 处理跨域 -->
+    <bean id="corsFilter" class="org.springframework.web.filter.CorsFilter">
+        <constructor-arg ref="urlBasedCorsConfigurationSource"/>
+    </bean>
+
+    <bean id="appFilter" class="com.yanyan.core.filter.ApiFilterFactoryBean">
+        <property name="gson" ref="gson"/>
+        <!--<property name="clientService" ref="portalService"/> -->
+        <property name="clientService" ref="apiClientService"/>
+
+        <property name="cacheName" value="web-appClientCache"/>
+        <property name="cacheManager" ref="webCacheManager"/>
+        <property name="readToken" value="true"/>
+        <property name="tokenKey" value="${token.signature.key}"/>
+    </bean>
+
+    <aop:aspectj-autoproxy/>
+
+    <!--Controller 方法拦截器，拦截所有方法，便于输出日志、调用时间等-->
+    <aop:config>
+        <aop:pointcut id="invokeMethodPointCut"
+                      expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)"/>
+
+        <aop:aspect id="invokeMethodAspect" ref="handlerMethodAspect">
+            <aop:around method="aroundInvoke" pointcut-ref="invokeMethodPointCut"/>
+            <!--aop:before method="beforeInvoke" pointcut-ref="invokeMethodPointCut"/>
+            <aop:after method="afterInvoke" pointcut-ref="invokeMethodPointCut"/>
+            <aop:after-returning method="afterReturning" pointcut-ref="invokeMethodPointCut" returning="returnValue"/>
+            <aop:after-throwing method="afterThrowing" pointcut-ref="invokeMethodPointCut" throwing="throwable"/-->
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="handlerMethodAspect"
+          class="com.yanyan.core.spring.web.servlet.mvc.method.annotation.HandlerMethodAspect"/>
+
+    <!--根据后缀返回不同的格式-->
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="mediaTypes">
+            <value>
+                html=text/html
+                json=application/json
+                xml=application/xml
+            </value>
+        </property>
+        <property name="defaultContentType" value="text/html"/>
+    </bean>
+
+    <!-- ContentNegotiatingViewResolver视图解析器,利用他就可以配置多种返回值 -->
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="contentNegotiationManager" ref="contentNegotiationManager"/>
+        <property name="defaultViews">
+            <list>
+                <bean class="com.yanyan.core.spring.web.servlet.view.json.GsonJsonView">
+                    <property name="extractValueFromSingleKeyModel" value="true"/>
+                    <property name="gson" ref="gson"/>
+                </bean>
+                <bean class="com.yanyan.core.spring.web.servlet.view.xml.SmlXmlView">
+                    <property name="extractValueFromSingleKeyModel" value="true"/>
+                    <property name="rootName" value="response"/>
+                    <property name="sml" ref="sml"/>
+                </bean>
+            </list>
+        </property>
+        <property name="viewResolvers">
+            <list>
+                <!-- 定义跳转的页面的前后缀 -->
+                <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="prefix" value="/WEB-INF/jsp/"/>
+                    <property name="suffix" value=".jsp"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+    <!-- 总错误处理-->
+    <bean id="exceptionResolver" class="com.yanyan.core.spring.web.servlet.handler.SimpleMappingFaultResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!-- 没有权限的页面 -->
+                <prop key="org.apache.shiro.authz.UnauthorizedException">errors/403</prop>
+                <!-- 上传文件大于最大尺寸后转向出错页面 -->
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">
+                    errors/500
+                </prop>
+            </props>
+        </property>
+        <property name="defaultErrorView">
+            <value>/errors/500</value>
+        </property>
+        <property name="defaultStatusCode">
+            <value>500</value>
+        </property>
+        <property name="warnLogCategory">
+            <value>com.yanyan.core.spring.web.servlet.handler.SimpleMappingFaultResolver</value>
+        </property>
+    </bean>
+</beans>
